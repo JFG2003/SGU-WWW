@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Libros - API FastAPI</title>
+</head>
+<body>
+    <h1>Agregar un libro</h1>
+    <form id="bookForm">
+        <label>Título:</label><br>
+        <input type="text" id="title" required><br><br>
+
+        <label>Autor:</label><br>
+        <input type="text" id="author" required><br><br>
+
+        <label>Año de publicación:</label><br>
+        <input type="number" id="year" required><br><br>
+
+        <button type="submit">Agregar Libro</button>
+    </form>
+
+    <h2>Listado de Libros</h2>
+    <ul id="bookList"></ul>
+
+    <script>
+        const apiUrl = 'http://127.0.0.1:8000/books/';
+
+        document.getElementById('bookForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            const year = parseInt(document.getElementById('year').value);
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, author, year })
+            });
+
+            if (response.ok) {
+                alert('Libro agregado correctamente');
+                loadBooks();
+                document.getElementById('bookForm').reset(); // Limpia el formulario
+            } else {
+                alert('Error al agregar libro');
+            }
+        });
+
+        async function loadBooks() {
+            const response = await fetch(apiUrl);
+            const books = await response.json();
+
+            const list = document.getElementById('bookList');
+            list.innerHTML = '';
+
+            books.forEach(book => {
+                const item = document.createElement('li');
+                item.textContent = `ID: ${book.id} - ${book.title} by ${book.author} (${book.year})`;
+                list.appendChild(item);
+            });
+        }
+
+        loadBooks();
+    </script>
+</body>
+</html>
