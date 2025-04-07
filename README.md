@@ -9,7 +9,8 @@ Miguel Angel Rueda Colonia - 2159896
 Tuluá, Valle del Cauca
 Fecha - inicio: 4/4/2025
 Fecha - Fin: 7/4/2025
-____________________________________________
+__________________________
+__________________
 
 ## Descripcion
 
