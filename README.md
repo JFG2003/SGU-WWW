@@ -5,9 +5,10 @@ __________________________________________
 Universidad del Valle
 Programa: Ingeniería en Sistemas
 Juan Felipe Guancha Durán – 2159950
+Miguel Angel Rueda Colonia - 2159896
 Tuluá, Valle del Cauca
-Fecha: 4/4/2025
-
+Fecha - inicio: 4/4/2025
+Fecha - Fin: 7/4/2025
 ____________________________________________
 
 ## Descripcion
