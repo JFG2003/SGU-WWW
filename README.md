@@ -10,19 +10,19 @@ Fecha: 4/4/2025
 
 ____________________________________________
 
-Descripcion
+## Descripcion
 
 Este proyecto es una API REST creada con FastAPI que permite gestionar libros (crear, listar, actualizar y eliminar). Utiliza SQLAlchemy como ORM para la base de datos y Pydantic para la validación de datos.
 
 _____________________________________________
 
-Instrucciones para su ejecucion local:
+## Instrucciones para su ejecucion local:
 
-* clonar el repositorio:
+1) clonar el repositorio:
     git clone https://github.com/tu_usuario/tu_repositorio.git
     cd tu_repositorio
 
-* Crear un entorno virtual de python:
+2) Crear un entorno virtual de python:
     NOTA: en este ejemplo usaremos un entorno virtual basado en UNIX (venv/bin/activate), el cual funciona si estas utilizando git bash, MSYS2 o similares
 
     si usas powershell o cmd consulta las instrucciones correspondientes. 
@@ -44,12 +44,12 @@ Instrucciones para su ejecucion local:
 
         * .\venv\Scripts\Activate.ps1
 
-    * Instalar las dependencias:
-        con el entorno virtual activado, instala las dependencias listadas en el archivo requierementes.txt
+3)  Instalar las dependencias:
+        con el entorno virtual activado, instala las dependencias listadas en el archivo requirementes.txt
 
         * pip install -r requirements.txt
 
-    * Ejecutar la aplicacion:
+4)  Ejecutar la aplicacion:
 
         * uvicorn App.Main::app --reload
 
@@ -59,3 +59,10 @@ Instrucciones para su ejecucion local:
         http://127.0.0.1:8000/docs
     
 
+## Tecnologías utilizadas
+
+- Python 3.11
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- Uvicorn

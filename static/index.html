@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Libros - API FastAPI</title>
+    <link rel="stylesheet" href="\static\style.css">
+    
+
 </head>
 <body>
     <h1>Agregar un libro</h1>
@@ -24,46 +27,97 @@
 
     <script>
         const apiUrl = 'http://127.0.0.1:8000/books/';
-
+        let editingBookId = null;
+    
         document.getElementById('bookForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
+    
             const title = document.getElementById('title').value;
             const author = document.getElementById('author').value;
             const year = parseInt(document.getElementById('year').value);
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ title, author, year })
-            });
-
-            if (response.ok) {
-                alert('Libro agregado correctamente');
-                loadBooks();
-                document.getElementById('bookForm').reset(); // Limpia el formulario
+    
+            if (editingBookId) {
+                const response = await fetch(apiUrl + editingBookId, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, author, year })
+                });
+    
+                if (response.ok) {
+                    alert('Libro actualizado');
+                    editingBookId = null;
+                    document.querySelector('#bookForm button').textContent = 'Agregar Libro';
+                    document.getElementById('bookForm').reset();
+                    loadBooks();
+                } else {
+                    alert('Error al actualizar libro');
+                }
             } else {
-                alert('Error al agregar libro');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, author, year })
+                });
+    
+                if (response.ok) {
+                    alert('Libro agregado correctamente');
+                    document.getElementById('bookForm').reset();
+                    loadBooks();
+                } else {
+                    alert('Error al agregar libro');
+                }
             }
         });
-
+    
         async function loadBooks() {
             const response = await fetch(apiUrl);
             const books = await response.json();
-
+    
             const list = document.getElementById('bookList');
             list.innerHTML = '';
-
+    
             books.forEach(book => {
                 const item = document.createElement('li');
-                item.textContent = `ID: ${book.id} - ${book.title} by ${book.author} (${book.year})`;
+                item.innerHTML = `
+                    ID: ${book.id} - ${book.title} by ${book.author} (${book.year})
+                    <button onclick="editBook(${book.id}, '${book.title}', '${book.author}', ${book.year})">Editar</button>
+                    <button onclick="deleteBook(${book.id})">Eliminar</button>
+                `;
                 list.appendChild(item);
             });
         }
-
+    
+        async function deleteBook(id) {
+            const confirmDelete = confirm('¿Estás seguro de eliminar este libro?');
+    
+            if (confirmDelete) {
+                const response = await fetch(apiUrl + id, {
+                    method: 'DELETE',
+                });
+    
+                if (response.ok) {
+                    alert('Libro eliminado');
+                    loadBooks();
+                } else {
+                    alert('Error al eliminar libro');
+                }
+            }
+        }
+    
+        function editBook(id, title, author, year) {
+            document.getElementById('title').value = title;
+            document.getElementById('author').value = author;
+            document.getElementById('year').value = year;
+            editingBookId = id;
+            document.querySelector('#bookForm button').textContent = 'Actualizar Libro';
+        }
+    
         loadBooks();
     </script>
+    
 </body>
 </html>
