@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Libros - API FastAPI</title>
-    <link rel="stylesheet" href="\static\style.css">
-    
-
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <h1>Agregar un libro</h1>
+
     <form id="bookForm">
         <label>Título:</label><br>
         <input type="text" id="title" required><br><br>
@@ -26,16 +25,24 @@
     <ul id="bookList"></ul>
 
     <script>
-        const apiUrl = 'http://127.0.0.1:8000/books/';
+        // Detectar si estamos local o en render
+        let apiUrl = '';
+
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            apiUrl = 'http://127.0.0.1:8000/books/';
+        } else {
+            apiUrl = 'https://sgu-www.onrender.com/books/';
+        }
+
         let editingBookId = null;
-    
+
         document.getElementById('bookForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-    
+
             const title = document.getElementById('title').value;
             const author = document.getElementById('author').value;
             const year = parseInt(document.getElementById('year').value);
-    
+
             if (editingBookId) {
                 const response = await fetch(apiUrl + editingBookId, {
                     method: 'PUT',
@@ -44,7 +51,7 @@
                     },
                     body: JSON.stringify({ title, author, year })
                 });
-    
+
                 if (response.ok) {
                     alert('Libro actualizado');
                     editingBookId = null;
@@ -62,7 +69,7 @@
                     },
                     body: JSON.stringify({ title, author, year })
                 });
-    
+
                 if (response.ok) {
                     alert('Libro agregado correctamente');
                     document.getElementById('bookForm').reset();
@@ -72,14 +79,14 @@
                 }
             }
         });
-    
+
         async function loadBooks() {
             const response = await fetch(apiUrl);
             const books = await response.json();
-    
+
             const list = document.getElementById('bookList');
             list.innerHTML = '';
-    
+
             books.forEach(book => {
                 const item = document.createElement('li');
                 item.innerHTML = `
@@ -90,15 +97,15 @@
                 list.appendChild(item);
             });
         }
-    
+
         async function deleteBook(id) {
             const confirmDelete = confirm('¿Estás seguro de eliminar este libro?');
-    
+
             if (confirmDelete) {
                 const response = await fetch(apiUrl + id, {
                     method: 'DELETE',
                 });
-    
+
                 if (response.ok) {
                     alert('Libro eliminado');
                     loadBooks();
@@ -107,7 +114,7 @@
                 }
             }
         }
-    
+
         function editBook(id, title, author, year) {
             document.getElementById('title').value = title;
             document.getElementById('author').value = author;
@@ -115,9 +122,8 @@
             editingBookId = id;
             document.querySelector('#bookForm button').textContent = 'Actualizar Libro';
         }
-    
+
         loadBooks();
     </script>
-    
 </body>
 </html>
